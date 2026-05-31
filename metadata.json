@@ -1,0 +1,6 @@
+{
+  "name": "Nova Bit Software",
+  "description": "Premium minimalist software studio specializing in ambient utilities, focus tools, and high-fidelity Android experiences.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
