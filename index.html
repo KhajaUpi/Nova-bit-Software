@@ -59,7 +59,7 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+      import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
       // Your live Nova Bit Firebase configurations
@@ -87,9 +87,9 @@
       const userAvatar = document.getElementById('user-avatar');
       const userName = document.getElementById('user-name');
 
-      // Login handler
+      // Login handler (Switched to Redirect Mode)
       loginBtn.addEventListener('click', () => {
-        signInWithPopup(auth, provider).catch(err => {
+        signInWithRedirect(auth, provider).catch(err => {
           console.error("Login error: ", err);
         });
       });
