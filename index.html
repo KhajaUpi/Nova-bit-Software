@@ -10,8 +10,102 @@
     <script type="module" crossorigin src="./assets/index-Cg--jVwK.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BV-5L1pb.css">
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+    <style>
+      #firebase-auth-overlay {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 20px;
+        border-radius: 12px;
+        color: #fff;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      }
+      .auth-btn {
+        background: #fff;
+        color: #000;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .auth-btn:hover { opacity: 0.9; }
+      .hidden { display: none !important; }
+      .user-profile { display: flex; align-items: center; gap: 10px; }
+      .user-profile img { width: 32px; height: 32px; border-radius: 50%; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <div id="firebase-auth-overlay">
+      <div id="logged-out-view">
+        <button id="login-btn" class="auth-btn">Log In</button>
+      </div>
+      <div id="logged-in-view" class="hidden user-profile">
+        <img id="user-avatar" src="" alt="Avatar">
+        <span id="user-name"></span>
+        <button id="logout-btn" class="auth-btn" style="background: transparent; color: #ff4a4a; margin-left: 10px;">Log Out</button>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+      // !!! REPLACE THIS WHOLE BLOCK WITH YOUR COPIED CONFIG FROM FIREBASE !!!
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      // DOM Elements
+      const loggedOutView = document.getElementById('logged-out-view');
+      const loggedInView = document.getElementById('logged-in-view');
+      const loginBtn = document.getElementById('login-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      const userAvatar = document.getElementById('user-avatar');
+      const userName = document.getElementById('user-name');
+
+      // Login
+      loginBtn.addEventListener('click', () => {
+        signInWithPopup(auth, provider).catch(err => console.error(err));
+      });
+
+      // Logout
+      logoutBtn.addEventListener('click', () => {
+        signOut(auth).catch(err => console.error(err));
+      });
+
+      // State Observer
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          loggedOutView.classList.add('hidden');
+          loggedInView.classList.remove('hidden');
+          userAvatar.src = user.photoURL || '';
+          userName.textContent = user.displayName || 'User';
+        } else {
+          loggedOutView.classList.remove('hidden');
+          loggedInView.classList.add('hidden');
+        }
+      });
+    </script>
   </body>
 </html>
