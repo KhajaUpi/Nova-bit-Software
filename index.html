@@ -60,20 +60,23 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
-      // !!! REPLACE THIS WHOLE BLOCK WITH YOUR COPIED CONFIG FROM FIREBASE !!!
+      // Your live Nova Bit Firebase configurations
       const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyBOO6ct3E2lA2UT2o6R1amKsZ9wpyiDZ-0",
+        authDomain: "nova-bit-software.firebaseapp.com",
+        projectId: "nova-bit-software",
+        storageBucket: "nova-bit-software.firebasestorage.app",
+        messagingSenderId: "60232912998",
+        appId: "1:60232912998:web:d777b3d9787b88c1195da7",
+        measurementId: "G-37T42XL9KW"
       };
 
-      // Initialize Firebase
+      // Initialize Firebase & Services
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
+      const analytics = getAnalytics(app);
       const provider = new GoogleAuthProvider();
 
       // DOM Elements
@@ -84,17 +87,21 @@
       const userAvatar = document.getElementById('user-avatar');
       const userName = document.getElementById('user-name');
 
-      // Login
+      // Login handler
       loginBtn.addEventListener('click', () => {
-        signInWithPopup(auth, provider).catch(err => console.error(err));
+        signInWithPopup(auth, provider).catch(err => {
+          console.error("Login error: ", err);
+        });
       });
 
-      // Logout
+      // Logout handler
       logoutBtn.addEventListener('click', () => {
-        signOut(auth).catch(err => console.error(err));
+        signOut(auth).catch(err => {
+          console.error("Logout error: ", err);
+        });
       });
 
-      // State Observer
+      // State Observer (Handles UI adjustments automatically)
       onAuthStateChanged(auth, (user) => {
         if (user) {
           loggedOutView.classList.add('hidden');
