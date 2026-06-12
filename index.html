@@ -27,13 +27,6 @@
         color: #fff;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
-      #apk-download-overlay {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        font-family: 'Inter', sans-serif;
-      }
       .auth-btn {
         background: #fff;
         color: #000;
@@ -42,20 +35,9 @@
         border-radius: 6px;
         font-weight: 500;
         cursor: pointer;
-        transition: opacity 0.2s, transform 0.2s;
+        transition: opacity 0.2s;
       }
-      .download-btn {
-        background: #007bff;
-        color: #fff;
-        text-decoration: none;
-        display: inline-block;
-        padding: 12px 24px;
-        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
-      }
-      .auth-btn:hover { 
-        opacity: 0.9; 
-        transform: translateY(-1px);
-      }
+      .auth-btn:hover { opacity: 0.9; }
       .hidden { display: none !important; }
       .user-profile { display: flex; align-items: center; gap: 10px; }
       .user-profile img { width: 32px; height: 32px; border-radius: 50%; }
@@ -63,13 +45,6 @@
   </head>
   <body>
     <div id="root"></div>
-
-    <div id="apk-download-overlay">
-      <a href="https://docs.google.com/uc?export=download&id=1xLFHCecaNFgbKe9D_P91-05VBO4BSNxP" 
-         class="auth-btn download-btn">
-         Download Nebula Screensaver <span style="font-weight: 300; opacity: 0.85; font-size: 13px; margin-left: 4px;">(Made by Afnaan)</span>
-      </a>
-    </div>
 
     <div id="firebase-auth-overlay">
       <div id="logged-out-view">
@@ -81,6 +56,47 @@
         <button id="logout-btn" class="auth-btn" style="background: transparent; color: #ff4a4a; margin-left: 10px;">Log Out</button>
       </div>
     </div>
+
+    <script>
+      const modifyPageContent = () => {
+        // 1. Change Heading from Zenith to Nebula
+        const headings = document.querySelectorAll('h1, h2, h3, h4');
+        headings.forEach(heading => {
+          if (heading.textContent.includes('Zenith Screensaver')) {
+            heading.textContent = 'Nebula Screensaver';
+          }
+        });
+
+        // 2. Find and update the "Download Project" button actions and text
+        const buttons = document.querySelectorAll('button, a');
+        buttons.forEach(btn => {
+          if (btn.textContent.trim().toLowerCase().includes('download project')) {
+            // Transform button to direct anchor link styling
+            btn.innerHTML = 'Download Nebula Screensaver <span style="font-weight: 300; opacity: 0.8; font-size: 0.85em; margin-left: 4px;">(Made by Afnaan)</span>';
+            
+            // If it's an anchor element tag, update the href link
+            if (btn.tagName.toLowerCase() === 'a') {
+              btn.setAttribute('href', 'https://docs.google.com/uc?export=download&id=1xLFHCecaNFgbKe9D_P91-05VBO4BSNxP');
+            } else {
+              // If it's a regular button tag, add a click action to trigger download window
+              btn.onclick = () => {
+                window.location.href = 'https://docs.google.com/uc?export=download&id=1xLFHCecaNFgbKe9D_P91-05VBO4BSNxP';
+              };
+            }
+          }
+        });
+      };
+
+      // Watch your React root container for updates to instantly apply modifications
+      const observer = new MutationObserver(() => {
+        modifyPageContent();
+      });
+
+      const rootNode = document.getElementById('root');
+      if (rootNode) {
+        observer.observe(rootNode, { childList: true, subtree: true });
+      }
+    </script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -112,7 +128,7 @@
       const userAvatar = document.getElementById('user-avatar');
       const userName = document.getElementById('user-name');
 
-      // Login handler (Switched to Redirect Mode)
+      // Login handler
       loginBtn.addEventListener('click', () => {
         signInWithRedirect(auth, provider).catch(err => {
           console.error("Login error: ", err);
@@ -126,7 +142,7 @@
         });
       });
 
-      // State Observer (Handles UI adjustments automatically)
+      // State Observer
       onAuthStateChanged(auth, (user) => {
         if (user) {
           loggedOutView.classList.add('hidden');
