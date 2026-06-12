@@ -27,6 +27,13 @@
         color: #fff;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
       }
+      #apk-download-overlay {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+      }
       .auth-btn {
         background: #fff;
         color: #000;
@@ -35,9 +42,20 @@
         border-radius: 6px;
         font-weight: 500;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: opacity 0.2s, transform 0.2s;
       }
-      .auth-btn:hover { opacity: 0.9; }
+      .download-btn {
+        background: #007bff;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        padding: 12px 24px;
+        box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+      }
+      .auth-btn:hover { 
+        opacity: 0.9; 
+        transform: translateY(-1px);
+      }
       .hidden { display: none !important; }
       .user-profile { display: flex; align-items: center; gap: 10px; }
       .user-profile img { width: 32px; height: 32px; border-radius: 50%; }
@@ -45,6 +63,13 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <div id="apk-download-overlay">
+      <a href="https://docs.google.com/uc?export=download&id=1BloUI-aiuAPxUCRpxP7EltTxLPIE_E76" 
+         class="auth-btn download-btn">
+         Download Nebula Screensaver <span style="font-weight: 300; opacity: 0.85; font-size: 13px; margin-left: 4px;">(Made by Afnaan)</span>
+      </a>
+    </div>
 
     <div id="firebase-auth-overlay">
       <div id="logged-out-view">
